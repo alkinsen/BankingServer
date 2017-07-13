@@ -1,5 +1,7 @@
 package com.monitise.alkin.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,10 +14,26 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Account {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     private long balance;
     private long accountLimit;
     private String name;
+    private String iban;
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Enumerated(EnumType.ORDINAL)
@@ -37,8 +55,6 @@ public class Account {
         this.accountLimit = accountLimit;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
     public User getUser() {
         return user;
     }
@@ -47,8 +63,6 @@ public class Account {
         this.user = user;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }

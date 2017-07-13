@@ -38,6 +38,7 @@ public class LoginServiceImpl implements LoginService{
             response.setStatusCode(HttpStatus.OK);
             response.setFirstName(user.getFirstName());
             response.setLastName(user.getLastName());
+            response.setId(user.getId());
         }else{
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             response.setMessage(messageUtil.getMessage("err.msg.incorrect.credentials"));

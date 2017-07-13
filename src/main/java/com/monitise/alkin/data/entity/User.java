@@ -1,8 +1,12 @@
 package com.monitise.alkin.data.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +27,7 @@ public class User {
     private String location;
     private String password;
 
+    @JsonIgnore
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private List<Account> accounts;
 
