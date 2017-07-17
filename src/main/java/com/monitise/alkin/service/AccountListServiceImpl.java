@@ -22,7 +22,6 @@ public class AccountListServiceImpl implements AccountListService {
         AccountListResponse accountListResponse = new AccountListResponse();
         accountListResponse.setAccountList(accountList);
         accountListResponse.setUserId(userId);
-        accountListResponse.setStatusCode(HttpStatus.OK);
 
         return accountListResponse;
     }

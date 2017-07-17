@@ -21,15 +21,14 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @RequestMapping(value="/login",method=POST)
-    public ResponseEntity<LoginResponse> login(HttpServletRequest httpServletRequest,
-                                               @RequestBody LoginRequest loginRequest) {
+    @RequestMapping(value = "/login", method = POST)
+    public LoginResponse login(HttpServletRequest httpServletRequest,
+                               @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = loginService.login(loginRequest);
 
-        if(loginResponse.getStatusCode() == HttpStatus.OK) {
-            httpServletRequest.getSession().setAttribute(Constants.USER_ID, loginResponse.getId());
-        }
+        httpServletRequest.getSession().setAttribute(Constants.USER_ID, loginResponse.getId());
 
-        return new ResponseEntity<>(loginResponse, loginResponse.getStatusCode());
+
+        return loginResponse;
     }
 }

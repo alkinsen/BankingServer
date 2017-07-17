@@ -11,7 +11,7 @@ public class MessageUtil {
     @Autowired
     private MessageSource messageSource;
 
-    public String getMessage(String key){
+    public String getMessage(String key) {
         return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
     }
 }

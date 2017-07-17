@@ -1,6 +1,6 @@
 package com.monitise.alkin.model;
 
-public class LoginResponse extends BaseResponse {
+public class LoginResponse {
     private String firstName;
     private String lastName;
     private long id;

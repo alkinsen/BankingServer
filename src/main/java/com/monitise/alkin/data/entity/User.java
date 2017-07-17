@@ -28,18 +28,8 @@ public class User {
     private String password;
 
     @JsonIgnore
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Account> accounts;
-
-    public User(){};
-
-    public User(String firstName, String lastName, int age, String location, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.location = location;
-        this.password = password;
-    }
 
     public String getCustomerNo() {
         return customerNo;

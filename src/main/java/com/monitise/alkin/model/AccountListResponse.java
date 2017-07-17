@@ -4,7 +4,7 @@ import com.monitise.alkin.data.entity.Account;
 
 import java.util.List;
 
-public class AccountListResponse extends BaseResponse{
+public class AccountListResponse {
 
     private List<Account> accountList;
     private long userId;

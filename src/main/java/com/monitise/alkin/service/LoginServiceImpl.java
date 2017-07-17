@@ -3,14 +3,16 @@ package com.monitise.alkin.service;
 import com.monitise.alkin.core.MessageUtil;
 import com.monitise.alkin.data.entity.User;
 import com.monitise.alkin.data.repository.UserRepository;
+import com.monitise.alkin.exceptions.BadRequestException;
+import com.monitise.alkin.exceptions.ForbiddenAccessException;
+import com.monitise.alkin.exceptions.UnauthorizedAccessException;
 import com.monitise.alkin.model.LoginRequest;
 import com.monitise.alkin.model.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoginServiceImpl implements LoginService{
+public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private MessageUtil messageUtil;
@@ -26,22 +28,18 @@ public class LoginServiceImpl implements LoginService{
         LoginResponse response = new LoginResponse();
 
         //customerNo is not 7 digits long
-        if(!customerNo.matches("^[0-9]{7}$")){
-            response.setMessage(messageUtil.getMessage("err.msg.invalid.customerNo"));
-            response.setStatusCode(HttpStatus.BAD_REQUEST);
-            return response;
+        if (!customerNo.matches("^[0-9]{7}$")) {
+            throw new BadRequestException(messageUtil.getMessage("err.msg.invalid.customerNo"));
         }
 
         User user = userRepository.findByCustomerNo(loginRequest.getCustomerNo());
 
-        if(user != null && user.getPassword().equals(password) ){
-            response.setStatusCode(HttpStatus.OK);
+        if (user != null && user.getPassword().equals(password)) {
             response.setFirstName(user.getFirstName());
             response.setLastName(user.getLastName());
             response.setId(user.getId());
-        }else{
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            response.setMessage(messageUtil.getMessage("err.msg.incorrect.credentials"));
+        } else {
+            throw new UnauthorizedAccessException(messageUtil.getMessage("err.msg.incorrect.credentials"));
         }
 
         return response;

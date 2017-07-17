@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MonitiseInternsAlkinApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MonitiseInternsAlkinApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MonitiseInternsAlkinApplication.class, args);
+    }
 }

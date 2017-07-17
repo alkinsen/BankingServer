@@ -1,6 +1,6 @@
 package com.monitise.alkin.model;
 
-public class TransferResponse extends BaseResponse{
+public class TransferResponse {
     private long newBalance;
 
     public long getNewBalance() {

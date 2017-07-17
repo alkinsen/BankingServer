@@ -3,6 +3,8 @@ package com.monitise.alkin.service;
 import com.monitise.alkin.core.MessageUtil;
 import com.monitise.alkin.data.entity.Account;
 import com.monitise.alkin.data.repository.AccountRepository;
+import com.monitise.alkin.exceptions.BadRequestException;
+import com.monitise.alkin.exceptions.PageNotFoundException;
 import com.monitise.alkin.model.TransferRequest;
 import com.monitise.alkin.model.TransferResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 
 @Service
-public class TransferServiceImpl implements TransferService{
+public class TransferServiceImpl implements TransferService {
 
     @Autowired
     private MessageUtil messageUtil;
@@ -28,31 +30,26 @@ public class TransferServiceImpl implements TransferService{
         Account toAccount = accountRepository.findAccountByIban(transferRequest.getToIBAN());
         int amount = Integer.parseInt(transferRequest.getAmount());
 
-        if(fromAccount == null || toAccount == null ){
-            transferResponse.setMessage(messageUtil.getMessage("err.msg.incorrect.iban"));
-            transferResponse.setStatusCode(HttpStatus.BAD_REQUEST);
-            return transferResponse;
+        if (fromAccount == null || toAccount == null) {
+            throw new BadRequestException(messageUtil.getMessage("err.msg.incorrect.iban"));
         }
 
-        if(userId != fromAccount.getUser().getId()){
-            transferResponse.setStatusCode(HttpStatus.NOT_FOUND);
-            transferResponse.setMessage(messageUtil.getMessage("err.msg.page.not.found"));
-            return transferResponse;
+        if (userId != fromAccount.getUser().getId()) {
+            throw new PageNotFoundException(messageUtil.getMessage("err.msg.page.not.found"));
         }
 
-        if(fromAccount.getBalance() < amount || fromAccount.getAccountLimit() < amount){
-            transferResponse.setMessage(messageUtil.getMessage("err.msg.not.enough.funds"));
-            transferResponse.setStatusCode(HttpStatus.BAD_REQUEST);
-        }else{
+        if (fromAccount.getBalance() < amount || fromAccount.getAccountLimit() < amount) {
+            throw new BadRequestException(messageUtil.getMessage("err.msg.not.enough.funds"));
 
-            fromAccount.setBalance(fromAccount.getBalance()-amount);
-            toAccount.setBalance(toAccount.getBalance()+amount);
+        } else {
+
+            fromAccount.setBalance(fromAccount.getBalance() - amount);
+            toAccount.setBalance(toAccount.getBalance() + amount);
 
             accountRepository.save(fromAccount);
             accountRepository.save(toAccount);
 
             transferResponse.setNewBalance(fromAccount.getBalance());
-            transferResponse.setStatusCode(HttpStatus.OK);
         }
 
         return transferResponse;

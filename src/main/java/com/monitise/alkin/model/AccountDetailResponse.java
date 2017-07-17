@@ -2,7 +2,7 @@ package com.monitise.alkin.model;
 
 import com.monitise.alkin.data.entity.Account;
 
-public class AccountDetailResponse extends BaseResponse{
+public class AccountDetailResponse {
 
     private Account account;
 

@@ -3,6 +3,7 @@ package com.monitise.alkin.controller;
 import com.monitise.alkin.core.MessageUtil;
 import com.monitise.alkin.core.Constants;
 import com.monitise.alkin.core.SessionCheck;
+import com.monitise.alkin.exceptions.PageNotFoundException;
 import com.monitise.alkin.model.AccountListResponse;
 import com.monitise.alkin.service.AccountListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +25,14 @@ public class AccountListController {
     @Autowired
     private AccountListService accountListService;
 
-    @RequestMapping(value="/accounts")
-    public ResponseEntity<AccountListResponse> listAccounts(HttpServletRequest httpServletRequest) {
+    @RequestMapping(value = "/accounts")
+    public AccountListResponse listAccounts(HttpServletRequest httpServletRequest) {
         HttpSession httpSession = httpServletRequest.getSession();
-        AccountListResponse accountListResponse = new AccountListResponse();
 
-        if(SessionCheck.check(httpSession)){
-            accountListResponse.setStatusCode(HttpStatus.NOT_FOUND);
-            accountListResponse.setMessage(messageUtil.getMessage("err.msg.page.not.found"));
-        }else{
-            accountListResponse = accountListService.getAccounts((long)httpSession.getAttribute(Constants.USER_ID));
+        if (SessionCheck.check(httpSession)) {
+            throw new PageNotFoundException(messageUtil.getMessage("err.msg.page.not.found"));
         }
-
-        return new ResponseEntity<>(accountListResponse, accountListResponse.getStatusCode());
+        return accountListService.getAccounts((long) httpSession.getAttribute(Constants.USER_ID));
     }
 
 

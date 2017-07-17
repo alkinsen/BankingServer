@@ -4,6 +4,8 @@ import com.monitise.alkin.core.MessageUtil;
 import com.monitise.alkin.core.Constants;
 import com.monitise.alkin.core.SessionCheck;
 import com.monitise.alkin.data.entity.Account;
+import com.monitise.alkin.exceptions.ForbiddenAccessException;
+import com.monitise.alkin.exceptions.PageNotFoundException;
 import com.monitise.alkin.model.AccountDetailResponse;
 import com.monitise.alkin.service.AccountDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,26 +27,23 @@ public class AccountDetailController {
     @Autowired
     private AccountDetailService accountDetailService;
 
-    @RequestMapping(value="/account/detail")
-    public ResponseEntity<AccountDetailResponse> accountDetail(HttpServletRequest httpServletRequest,
-                                                       @RequestParam(Constants.ACCOUNT_ID) long accountId) {
+    @RequestMapping(value = "/account/detail")
+    public AccountDetailResponse accountDetail(HttpServletRequest httpServletRequest,
+                                               @RequestParam(Constants.ACCOUNT_ID) long accountId) {
         HttpSession httpSession = httpServletRequest.getSession();
-        AccountDetailResponse accountDetailResponse = new AccountDetailResponse();
 
-        if(SessionCheck.check(httpSession)){
-            accountDetailResponse.setStatusCode(HttpStatus.FORBIDDEN);
-            accountDetailResponse.setMessage(messageUtil.getMessage("err.msg.forbidden.access"));
-        }else{
-            accountDetailResponse = accountDetailService.getAccountDetails(accountId);
-            Account account = accountDetailResponse.getAccount();
-            if(account == null || httpSession.getAttribute(Constants.USER_ID) != account.getUser().getId()){
-                accountDetailResponse.setStatusCode(HttpStatus.FORBIDDEN);
-                accountDetailResponse.setMessage(messageUtil.getMessage("err.msg.forbidden.access"));
-                accountDetailResponse.setAccount(null);
-            }
+        if (SessionCheck.check(httpSession)) {
+            throw new PageNotFoundException(messageUtil.getMessage("err.msg.page.not.found"));
         }
 
-        return new ResponseEntity<>(accountDetailResponse, accountDetailResponse.getStatusCode());
+        AccountDetailResponse accountDetailResponse = accountDetailService.getAccountDetails(accountId);
+        Account account = accountDetailResponse.getAccount();
+
+        if (account == null || httpSession.getAttribute(Constants.USER_ID) != account.getUser().getId()) {
+            throw new ForbiddenAccessException(messageUtil.getMessage("err.msg.forbidden.access"));
+        }
+
+        return accountDetailResponse;
     }
 
 
