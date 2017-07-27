@@ -5,6 +5,16 @@ public class TransferRequest {
     private String toIBAN;
     private String amount;
 
+    public TransferRequest(String fromIBAN, String toIBAN, String amount) {
+        this.fromIBAN = fromIBAN;
+        this.toIBAN = toIBAN;
+        this.amount = amount;
+    }
+
+    public TransferRequest() {
+
+    }
+
     public String getFromIBAN() {
         return fromIBAN;
     }
@@ -15,5 +25,17 @@ public class TransferRequest {
 
     public String getAmount() {
         return amount;
+    }
+
+    public void setFromIBAN(String fromIBAN) {
+        this.fromIBAN = fromIBAN;
+    }
+
+    public void setToIBAN(String toIBAN) {
+        this.toIBAN = toIBAN;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 }

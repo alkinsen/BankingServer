@@ -11,4 +11,12 @@ public class LoginRequest {
     public String getPassword() {
         return password;
     }
+
+    public LoginRequest() {
+    }
+
+    public LoginRequest(String customerNo, String password) {
+        this.customerNo = customerNo;
+        this.password = password;
+    }
 }

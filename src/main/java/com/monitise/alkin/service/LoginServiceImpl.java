@@ -11,6 +11,8 @@ import com.monitise.alkin.model.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.logging.Logger;
+
 @Service
 public class LoginServiceImpl implements LoginService {
 
@@ -39,6 +41,7 @@ public class LoginServiceImpl implements LoginService {
             response.setLastName(user.getLastName());
             response.setId(user.getId());
         } else {
+            Logger.getLogger(this.getClass().getName()).info("Login Unsuccessful. User Id: " + customerNo);
             throw new UnauthorizedAccessException(messageUtil.getMessage("err.msg.incorrect.credentials"));
         }
 

@@ -10,12 +10,11 @@ import org.springframework.stereotype.Service;
 public class AccountDetailServiceImpl implements AccountDetailService {
 
     @Autowired
-    AccountRepository accountRepository;
+    private AccountRepository accountRepository;
 
     public AccountDetailResponse getAccountDetails(long accountId) {
 
         AccountDetailResponse accountDetailResponse = new AccountDetailResponse();
-
         accountDetailResponse.setAccount(accountRepository.findOne(accountId));
 
         return accountDetailResponse;

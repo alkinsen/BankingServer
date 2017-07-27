@@ -20,6 +20,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public User() {
+    }
+
     private String customerNo;
     private String firstName;
     private String lastName;

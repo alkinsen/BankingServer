@@ -8,9 +8,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.logging.Logger;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    BaseResponse handleDefaultException(HttpServletRequest req, Exception ex){
+        return new BaseResponse(ex.getMessage());
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
